@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="@Url.Content("~/admin/css/layout.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Admin - Hệ thống quản lý đồ án</title>
+</head>
+<body>
+    <div class="admin-control">
+        <div class="sidebar">
+            <div class="admin-profile">
+                <img src="@Url.Content(ViewData["Avatar"]?.ToString() ?? "~/shared/images/default-avatar.jpg")"
+                     alt="Admin Avatar" class="admin-avatar" />
+                <p class="admin-name">@ViewData["TenNguoiDung"]</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="/Admin/Home/Index" id="dashboard">
+                    <i class="fa-solid fa-gauge"></i> Bảng điều khiển
+                </a>
+
+                <a href="/Admin/DefenseSessionManagement/Index" id="defense-session-management">
+                    <i class="fa-solid fa-layer-group"></i> Quản lý đợt bảo vệ
+                </a>
+
+                <a href="/Admin/StudentManagement/Index" id="student-management">
+                    <i class="fa-solid fa-user-graduate"></i> Quản lý sinh viên
+                </a>
+
+                <a href="/Admin/LecturerManagement/Index" id="lecturer-management">
+                    <i class="fa-solid fa-chalkboard-teacher"></i> Quản lý giảng viên
+                </a>
+
+                <a href="/Admin/PostManagement/Index" id="post-management">
+                    <i class="fa-solid fa-newspaper"></i> Quản lý bài đăng
+                </a>
+
+                <a href="/Admin/ReportStatistics/Index" id="report-statistics">
+                    <i class="fa-solid fa-chart-column"></i> Báo cáo & Thống kê
+                </a>
+
+                <a href="/Admin/Setting/Index" id="setting">
+                    <i class="fa-solid fa-gear"></i> Cài đặt
+                </a>
+
+                <a href="/Home/Login" id="logout"method ="post"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            @RenderBody()
+            @RenderSection("Scripts", required: false)
+        </div>
+    </div>
+</body>
+</html>

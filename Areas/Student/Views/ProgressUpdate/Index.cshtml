@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Báo Cáo Tiến Độ";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/student/css/progress-update.css" />
+
+<div class="progress-report-container">
+    <h2>Báo Cáo Tiến Độ</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @if (ViewBag.ThongBao != null)
+    {
+        <div class="alert alert-warning">@ViewBag.ThongBao</div>
+    }
+    else
+    {
+        var deTai = ViewData["DeTai"] as BTL_UML.Data.DeTai;
+        var danhSachBaoCao = ViewData["DanhSachBaoCao"] as List<BTL_UML.Data.BaoCaoTienDo>;
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4>Thông tin đề tài</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Mã đề tài:</strong> @deTai.MaDeTai</p>
+                        <p><strong>Tên đề tài:</strong> @deTai.TenDeTai</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Ngày đăng ký:</strong> @deTai.NgayDangKy?.ToString("dd/MM/yyyy")</p>
+                        <p><strong>Trạng thái:</strong> <span class="badge bg-success">@deTai.TrangThaiDuyet</span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p><strong>Mô tả:</strong> @deTai.MoTa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Nộp báo cáo tiến độ mới</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" action="@Url.Action("SubmitReport", "ProgressUpdate", new { area = "Student" })" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="MaDeTai" value="@deTai.MaDeTai" />
+
+                    <div class="form-group mb-3">
+                        <label for="NoiDungBaoCao">Nội dung báo cáo tiến độ <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="NoiDungBaoCao" name="NoiDungBaoCao" rows="5" required></textarea>
+                        <small class="form-text text-muted">Mô tả chi tiết những gì bạn đã hoàn thành và những khó khăn gặp phải</small>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="TepTinNop">Tệp tin đính kèm</label>
+                        <input type="file" class="form-control" id="TepTinNop" name="TepTinNop" />
+                        <small class="form-text text-muted">Định dạng hỗ trợ: PDF, DOCX, XLSX, RAR, ZIP (tối đa 10MB)</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-2">Nộp báo cáo</button>
+                </form>
+            </div>
+        </div>
+
+        @if (danhSachBaoCao != null && danhSachBaoCao.Any())
+        {
+            <div class="defense-session-table mt-4">
+                <h4>Danh sách báo cáo tiến độ đã nộp</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Mã báo cáo</th>
+                                <th>Nội dung</th>
+                                <th>Ngày nộp</th>
+                                <th>Nhận xét</th>
+                                <th>Tệp tin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var baoCao in danhSachBaoCao)
+                            {
+                                <tr>
+                                    <td>@baoCao.MaBctd</td>
+                                    <td>
+                                        @(baoCao.NoiDungBaoCao?.Length > 50
+                                            ? baoCao.NoiDungBaoCao.Substring(0, 50) + "..."
+                                            : baoCao.NoiDungBaoCao)
+                                    </td>
+                                    <td>@baoCao.NgayCapNhat?.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>
+                                        @(string.IsNullOrEmpty(baoCao.NhanXet)
+                                            ? "Chưa có nhận xét"
+                                            : (baoCao.NhanXet.Length > 50
+                                            ? baoCao.NhanXet.Substring(0, 50) + "..."
+                                            : baoCao.NhanXet))
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(baoCao.TepTinNop))
+                                        {
+                                            <a href="@baoCao.TepTinNop" target="_blank" class="btn btn-view">
+                                                <i class="fas fa-download"></i> Chi tiết
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Không có tệp</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+</div>

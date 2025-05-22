@@ -1,0 +1,209 @@
+﻿#lecturer-management-content {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.content-section-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.search-options {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    padding: 8px;
+    font-size: 14px;
+    width: 250px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+    .search-input:focus {
+        border-color: #5c9ded;
+    }
+
+.search button {
+    background-color: #5c9ded;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    margin-left: 5px;
+    margin-right: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+    .search button:hover {
+        background-color: #4788b0;
+    }
+
+.filter-bar label[for="departmentFilter"] {
+    margin-left: 15px;
+    margin-right: 5px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.filter-bar select[name="departmentFilter"] {
+    padding: 7px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    vertical-align: middle;
+    transition: border-color 0.3s ease;
+}
+
+    .filter-bar select[name="departmentFilter"]:focus {
+        outline: none;
+        border-color: #5c9ded;
+        box-shadow: 0 0 5px rgba(92, 157, 237, 0.5);
+    }
+
+.lecturer-table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .lecturer-table table {
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    .lecturer-table th, .lecturer-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .lecturer-table th {
+        background-color: #f4f4f4;
+    }
+
+    .lecturer-table tr:hover {
+        background-color: #f9f9f9;
+    }
+
+.actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+    .actions .detail-button,
+    .actions .edit-button,
+    .actions .delete-button,
+    .actions .add-button {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .actions .detail-button {
+        background-color: #5c9ded;
+        color: white;
+    }
+
+        .actions .detail-button:hover {
+            background-color: #4788b0;
+        }
+
+    .actions .edit-button {
+        background-color: #ffc107;
+        color: white;
+    }
+
+        .actions .edit-button:hover {
+            background-color: #e0a800;
+        }
+
+    .actions .delete-button {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+        .actions .delete-button:hover {
+            background-color: #c0392b;
+        }
+
+    .actions .add-button {
+        background-color: #28a745;
+        color: white;
+    }
+
+        .actions .add-button:hover {
+            background-color: #218838;
+        }
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination-list {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+    margin: 0;
+}
+
+    .pagination-list li {
+        margin: 0 5px;
+    }
+
+    .pagination-list a {
+        padding: 8px 12px;
+        background-color: #f4f4f4;
+        text-decoration: none;
+        color: #333;
+        border-radius: 4px;
+    }
+
+        .pagination-list a:hover {
+            background-color: #5c9ded;
+            color: white;
+        }
+
+        .pagination-list a:active {
+            background-color: #4788b0;
+        }
+
+    .pagination-list li a {
+        cursor: pointer;
+        display: inline-block;
+    }
+
+    .pagination-list .disabled {
+        cursor: not-allowed;
+        background-color: #ddd;
+    }
+
+button[type="submit"] {
+    padding: 7px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }

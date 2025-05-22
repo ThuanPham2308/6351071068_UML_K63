@@ -1,0 +1,220 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+h3, h4, h5 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card-header {
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.alert {
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.alert-info {
+    background-color: #d9edf7;
+    color: #31708f;
+}
+
+.alert-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+}
+
+.alert-danger {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.control-label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+
+button,
+.btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+    button[type="submit"],
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+        button[type="submit"]:hover,
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+.badge {
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-size: 0.875rem;
+}
+
+    .badge.bg-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .badge.bg-success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge.bg-danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1.5rem;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -12px;
+}
+
+.col-md-3, .col-md-9, .col-md-12 {
+    padding: 0 12px;
+}
+
+.col-md-3 {
+    flex: 0 0 25%;
+}
+
+.col-md-9 {
+    flex: 0 0 75%;
+}
+
+.col-md-12 {
+    flex: 0 0 100%;
+}
+
+.ms-2 {
+    margin-left: 0.5rem;
+}
+
+.d-inline {
+    display: inline;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.text-dark {
+    color: #212529;
+}

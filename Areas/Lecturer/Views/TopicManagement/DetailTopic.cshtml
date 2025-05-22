@@ -1,0 +1,152 @@
+﻿@model BTL_UML.ViewModels.ChiTietDeTaiViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đề tài";
+    Layout = "~/Areas/Lecturer/Views/Shared/_Layout.cshtml";
+    var vaiTro = (string)ViewBag.VaiTroGiangVien ?? "";
+    bool isHuongDan = ViewBag.IsHuongDan == true;
+    bool isBienLuan = ViewBag.IsBienLuan == true;
+    bool daDuyet = Model.TrangThaiDuyet == "Đã duyệt";
+    bool daXacNhanBaoVe = Model.LuanVans.Any(lv => lv.XacNhanBaoVe == "Được bảo vệ" && lv.TrangThaiDuyet == "Đã duyệt");
+
+    var luanVan = Model.LuanVans.FirstOrDefault();
+    var trangThaiXacNhan = luanVan?.XacNhanBaoVe ?? "";
+
+    var ketQua = Model.KetQuas.FirstOrDefault();
+}
+<link href="@Url.Content("~/lecturer/css/topic-management.css")" rel="stylesheet" />
+
+<h2>Chi tiết đề tài</h2>
+
+<h3>@Model.TenDeTai</h3>
+<p><strong>Mô tả:</strong> @Model.MoTa</p>
+<p><strong>Trạng thái duyệt:</strong> @luanVan?.TrangThaiDuyet</p>
+
+@if (luanVan?.TrangThaiDuyet != "Đã duyệt")
+{
+    <p>Đề tài đang chờ duyệt hoặc đã bị từ chối.</p>
+}
+else
+{
+    <h4>Đề cương kế hoạch</h4>
+    @if (Model.DeCuongKeHoaches.Any())
+    {
+        <ul>
+            @foreach (var dc in Model.DeCuongKeHoaches)
+            {
+
+                <li>
+                    <a href="@dc.NoiDungDeCuong" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Tải xuống đề cương
+                    </a>
+                </li>
+                <li>
+                    <a href="@dc.KeHoachThucHien" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Tải xuống kế hoạch
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Chưa có đề cương kế hoạch.</p>
+    }
+
+    <h4>Báo cáo tiến độ</h4>
+    @if (Model.BaoCaoTienDos.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Tiêu đề</th>
+                    <th>Ngày báo cáo</th>
+                    <th>File báo cáo</th>
+                    <th>Nhận xét</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var bc in Model.BaoCaoTienDos)
+                {
+                    <tr>
+                        <td>@bc.NoiDungBaoCao</td>
+                        <td>@bc.NgayCapNhat?.ToShortDateString()</td>
+                        <td>
+                            <a href="@bc.TepTinNop" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-download"></i> Tải xuống báo cáo
+                            </a>
+                        </td>
+                        <td>
+                            @if (isHuongDan)
+                            {
+                                <form method="post" action="@Url.Action("LuuNhanXet", "TopicManagement", new { area = "Lecturer" })">
+                                    <input type="hidden" name="maBCTD" value="@bc.MaBctd" />
+                                    <textarea name="nhanXet" rows="2" cols="30">@bc.NhanXet</textarea>
+                                    <button type="submit">Lưu</button>
+                                </form>
+                            }
+                            else
+                            {
+                                @bc.NhanXet
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Chưa có báo cáo tiến độ.</p>
+    }
+
+    @if (isBienLuan)
+    {
+        <h4>Xác nhận bảo vệ luận văn</h4>
+
+        @if (luanVan != null)
+        {
+            <p>Trạng thái xác nhận: @trangThaiXacNhan</p>
+
+            <form method="post" action="@Url.Action("XacNhanBaoVe", "TopicManagement", new { area = "Lecturer" })">
+                <input type="hidden" name="maLuanVan" value="@luanVan.MaLuanVan" />
+                <select name="trangThai">
+                    <option value="Được bảo vệ" selected="@(trangThaiXacNhan == "Được bảo vệ")">Được bảo vệ</option>
+                    <option value="Không được bảo vệ" selected="@(trangThaiXacNhan == "Không được bảo vệ")">Không được bảo vệ</option>
+                </select>
+                <button type="submit">Lưu</button>
+            </form>
+        }
+    }
+
+    @if (isHuongDan)
+    {
+
+        @if (luanVan != null)
+        {
+            <form method="post" action="@Url.Action("DuyetDeTai", "TopicManagement", new { area = "Lecturer" })
+            ">
+                <input type="hidden" name="maDeTai" value="@Model.MaDeTai" />
+            <label>Duyệt đề tài: </label>
+            <select name="trangThai">
+                <option value="Đã duyệt">Duyệt</option>
+                <option value="Từ chối">Từ chối</option>
+            </select>
+            <button type="submit">Lưu</button>
+        </form>
+        }
+    }
+
+    @if (daDuyet && daXacNhanBaoVe)
+    {
+        <h4>Kết quả đánh giá</h4>
+
+        <form method="post" action="@Url.Action("LuuKetQua", "TopicManagement", new { area = "Lecturer" })">
+            <input type="hidden" name="MaDeTai" value="@Model.MaDeTai" />
+            <label>Điểm quá trình:</label>
+            <input type="number" name="DiemQuaTrinh" min="0" max="10" step="0.1" value="@(ketQua?.DiemQuaTrinh ?? 0)" required />
+            <br />
+            <button type="submit">Lưu kết quả</button>
+        </form>
+    }
+}

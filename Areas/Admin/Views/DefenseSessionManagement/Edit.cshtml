@@ -1,0 +1,72 @@
+﻿@model BTL_UML.ViewModels.KiBaoVeDoAnViewModel
+@{
+    ViewData["Title"] = "Sửa kỳ bảo vệ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/admin/css/defense-session-management.css")" rel="stylesheet" />
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+<form asp-area="Admin" asp-controller="DefenseSessionManagement" asp-action="Edit" method="post" class="form-horizontal">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        <label class="control-label">Tên kỳ <span class="text-danger">*</span></label>
+        <input name="TenKi" class="form-control" value="@Model.TenKi" />
+        <span asp-validation-for="TenKi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Năm học <span class="text-danger">*</span></label>
+        <input name="NamHoc" class="form-control" value="@Model.NamHoc" />
+        <span asp-validation-for="NamHoc" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Học kỳ <span class="text-danger">*</span></label>
+        <select name="HocKy" class="form-control">
+            <option value="">-- Chọn học kỳ --</option>
+            <option value="Kì I" @(Model.HocKy == "Kì I" ? "selected" : "")>Kì I</option>
+            <option value="Kì II" @(Model.HocKy == "Kì II" ? "selected" : "")>Kì II</option>
+            <option value="Hè" @(Model.HocKy == "Hè" ? "selected" : "")>Hè</option>
+        </select>
+        <span asp-validation-for="HocKy" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Ngày bắt đầu <span class="text-danger">*</span></label>
+        <input name="NgayBatDau" type="date" class="form-control" value="@Model.NgayBatDau.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="NgayBatDau" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Ngày kết thúc <span class="text-danger">*</span></label>
+        <input name="NgayKetThuc" type="date" class="form-control" value="@Model.NgayKetThuc.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="NgayKetThuc" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="control-label">Ghi chú</label>
+        <textarea name="GhiChu" class="form-control" rows="4">@Model.GhiChu</textarea>
+        <span asp-validation-for="GhiChu" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <a href="/Admin/DefenseSessionManagement/Index" class="btn btn-secondary">Hủy</a>
+    </div>
+</form>
+
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

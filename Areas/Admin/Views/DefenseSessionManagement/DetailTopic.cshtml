@@ -1,0 +1,190 @@
+﻿@model BTL_UML.ViewModels.ChiTietDeTaiViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đề tài";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+@using System.Linq
+@{
+    var dsGiangVien = ViewBag.DanhSachGiangVien as List<BTL_UML.Data.GiangVien>;
+}
+<link href="@Url.Content("~/admin/css/defense-session-management.css")" rel="stylesheet" />
+
+<div class="project-details">
+
+    <h3>Thông tin đề tài</h3>
+
+    @if (Model.TrangThaiDuyet != "Đã duyệt")
+    {
+        <div>
+            <strong>Mã đề tài:</strong> @Model.MaDeTai <br />
+            <strong>Tên đề tài:</strong> @Model.TenDeTai <br />
+            <strong>Mô tả:</strong> @Model.MoTa <br />
+            <a href="/Admin/DefenseSessionManagement/CapNhatTrangThaiDuyet?MaDeTai=@Model.MaDeTai&TrangThaiDuyet=Đã duyệt" class="btn btn-success">Duyệt</a>
+            <a href="/Admin/DefenseSessionManagement/CapNhatTrangThaiDuyet?MaDeTai=@Model.MaDeTai&TrangThaiDuyet=Từ chối" class="btn btn-danger">Từ chối</a>
+        </div>
+    }
+    else
+    {
+        <div>
+            <strong>Mã đề tài:</strong> @Model.MaDeTai <br />
+            <strong>Tên đề tài:</strong> @Model.TenDeTai <br />
+            <strong>Mô tả:</strong> @Model.MoTa <br />
+            <strong>Trạng thái hiện tại: </strong>@Model.TrangThaiDuyet
+        </div>
+    }
+     
+    <h3>Thông tin sinh viên</h3>
+    <div>
+        <strong>Mã sinh viên:</strong> @Model.MaSinhVien <br />
+        <strong>Họ tên:</strong> @Model.HoTen <br />
+        <strong>Ngày sinh:</strong> @(Model.NgaySinh == DateTime.MinValue ? "Chưa có ngày sinh" : Model.NgaySinh.ToString("dd/MM/yyyy")) <br />
+        <strong>Giới tính:</strong> @Model.GioiTinh <br />
+        <strong>Địa chỉ:</strong> @Model.DiaChi <br />
+        <strong>Email:</strong> @Model.Email <br />
+    </div>
+
+    @if (Model.TrangThaiDuyet == "Đã duyệt")
+    {
+        <form method="post" action="@Url.Action("CapNhatGiangVien", "DefenseSessionManagement", new { area = "Admin" })">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="MaDeTai" value="@Model.MaDeTai" />
+
+            <h3>Giảng viên hướng dẫn</h3>
+            <select name="GiangVienHuongDanId" class="form-control" id="GiangVienHuongDanId">
+                <option value="">-- Chọn giảng viên hướng dẫn --</option>
+                @foreach (var gv in dsGiangVien)
+                {
+                    var selected = Model.PhanCongGiangViens.Any(pc => pc.MaGiangVien == gv.MaGiangVien && pc.VaiTro == "Hướng dẫn") ? "selected" : "";
+                    <option value="@gv.MaGiangVien" @selected>@gv.MaNguoiDungNavigation.HoTen</option>
+                }
+            </select>
+
+            <h3>Giảng viên biện luận</h3>
+            <select name="GiangVienBienLuanId" class="form-control" id="GiangVienBienLuanId">
+                <option value="">-- Chọn giảng viên biện luận --</option>
+                @foreach (var gv in dsGiangVien)
+                {
+                    var selected = Model.PhanCongGiangViens.Any(pc => pc.MaGiangVien == gv.MaGiangVien && pc.VaiTro == "Biện luận") ? "selected" : "";
+                    <option value="@gv.MaGiangVien" @selected>@gv.MaNguoiDungNavigation.HoTen</option>
+                }
+            </select>
+            <br />
+            <button type="submit" class="btn btn-primary mt-2" onclick="return confirm('Bạn có chắc chắn muốn cập nhật phân công giảng viên?');">Lưu phân công</button>
+        </form>
+    }
+
+    @if (Model.TrangThaiDuyet == "Đã duyệt")
+    {
+        <h3>Đề cương kế hoạch</h3>
+        @if (Model.DeCuongKeHoaches.Any())
+        {
+            <ul>
+                @foreach (var dc in Model.DeCuongKeHoaches)
+                {
+                    <li>
+                        <strong>Nội dung đề cương:</strong>
+                        @if (!string.IsNullOrEmpty(@dc.NoiDungDeCuong))
+                        {
+                            <a href="@dc.NoiDungDeCuong" target="_blank" class="btn btn-sm btn-info">
+                                <i class="fas fa-download"></i> Đề cương chi tiết
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Không có tệp</span>
+                        } <br />
+                        <strong>Kế hoạch thực hiện:</strong> 
+                        @if (!string.IsNullOrEmpty(@dc.KeHoachThucHien))
+                        {
+                            <a href="@dc.KeHoachThucHien" target="_blank" class="btn btn-sm btn-info">
+                                <i class="fas fa-download"></i> Kế hoạch chi tiết
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Không có tệp</span>
+                        } <br />
+                        <strong>Ngày nộp:</strong> @(dc.NgayNop.ToString("dd/MM/yyyy"))
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Chưa có đề cương kế hoạch.</p>
+        }
+
+        <h3>Báo cáo tiến độ</h3>
+        @if (Model.BaoCaoTienDos.Any())
+        {
+            <ul>
+                @foreach (var bc in Model.BaoCaoTienDos)
+                {
+                    <li>
+                        <strong>Nội dung báo cáo:</strong> @bc.NoiDungBaoCao <br />
+                        <strong>Kế hoạch thực hiện:</strong>
+                        @if (!string.IsNullOrEmpty(@bc.TepTinNop))
+                        {
+                            <a href="@bc.TepTinNop" target="_blank" class="btn btn-sm btn-info">
+                                <i class="fas fa-download"></i> Báo cáo tiến độ
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Không có tệp</span>
+                        } <br />
+                        <strong>Nhận xét:</strong> @bc.NhanXet
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Chưa có báo cáo tiến độ.</p>
+        }
+
+        <h3>Luận văn</h3>
+        @if (Model.LuanVans.Any())
+        {
+            <ul>
+                @foreach (var lv in Model.LuanVans)
+                {
+                    <li>
+                        <strong>Ngày nộp:</strong> @(lv.NgayNop?.ToString("dd/MM/yyyy") ?? "Chưa nộp") <br />
+                        <strong>Mô tả:</strong> @lv.MoTa <br />
+                        <strong>Xác nhận bảo vệ:</strong> @lv.XacNhanBaoVe <br />
+                        <strong>Trạng thái:</strong> @lv.TrangThai
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Chưa có luận văn.</p>
+        }
+
+        <h3>Kết quả</h3>
+        @if (Model.KetQuas.Any())
+        {
+            <ul>
+                @foreach (var kq in Model.KetQuas)
+                {
+                    <li>
+                        <strong>Điểm quá trình:</strong> @kq.DiemQuaTrinh <br />
+                        <strong>Điểm bảo vệ:</strong> @kq.DiemBaoVe <br />
+                        <strong>Nhận xét:</strong> @kq.NhanXet
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Chưa có kết quả đánh giá.</p>
+        }
+    }
+    else
+    {
+        <p><em>Thông tin đề cương kế hoạch, báo cáo tiến độ, luận văn, kết quả sẽ được hiển thị khi đề tài đã duyệt.</em></p>
+    }
+</div>

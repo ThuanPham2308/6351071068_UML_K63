@@ -1,0 +1,124 @@
+﻿@model BTL_UML.ViewModels.ChiTietDeTaiViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đề tài";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+@using System.Linq
+@{
+    var dsGiangVien = ViewBag.DanhSachGiangVien as List<BTL_UML.Data.GiangVien>;
+}
+<link href="@Url.Content("~/student/css/repository.css")" rel="stylesheet" />
+
+<div class="project-details">
+
+    <h3>Thông tin đề tài</h3>
+    <div>
+        <strong>Mã đề tài:</strong> @Model.MaDeTai <br />
+        <strong>Tên đề tài:</strong> @Model.TenDeTai <br />
+        <strong>Mô tả:</strong> @Model.MoTa <br />
+        <strong>Trạng thái duyệt:</strong> @Model.TrangThaiDuyet <br />
+</div>
+
+    <h3>Thông tin sinh viên</h3>
+    <div>
+        <strong>Mã sinh viên:</strong> @Model.MaSinhVien <br />
+        <strong>Họ tên:</strong> @Model.HoTen <br />
+        <strong>Ngày sinh:</strong> @(Model.NgaySinh == DateTime.MinValue ? "Chưa có ngày sinh" : Model.NgaySinh.ToString("dd/MM/yyyy")) <br />
+        <strong>Giới tính:</strong> @Model.GioiTinh <br />
+        <strong>Địa chỉ:</strong> @Model.DiaChi <br />
+        <strong>Email:</strong> @Model.Email <br />
+    </div>
+
+    <h3>Giảng viên hướng dẫn</h3>
+    <div>
+        @{
+            var gvHuongDan = Model.PhanCongGiangViens.FirstOrDefault(p => p.VaiTro == "Hướng dẫn");
+        }
+        <strong>Họ tên:</strong> @(gvHuongDan?.MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen ?? "Chưa phân công")
+    </div>
+
+    <h3>Giảng viên biện luận</h3>
+    <div>
+        @{
+            var gvBienLuan = Model.PhanCongGiangViens.FirstOrDefault(p => p.VaiTro == "Biện luận");
+        }
+        <strong>Họ tên:</strong> @(gvBienLuan?.MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen ?? "Chưa phân công")
+    </div>
+
+    <h3>Đề cương kế hoạch</h3>
+    @if (Model.DeCuongKeHoaches.Any())
+    {
+        <ul>
+            @foreach (var dc in Model.DeCuongKeHoaches)
+            {
+                <li>
+                    <strong>Nội dung đề cương:</strong> @dc.NoiDungDeCuong <br />
+                    <strong>Kế hoạch thực hiện:</strong> @dc.KeHoachThucHien <br />
+                    <strong>Ghi chú:</strong> @dc.GhiChu <br />
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Chưa có đề cương kế hoạch.</p>
+    }
+
+    <h3>Báo cáo tiến độ</h3>
+    @if (Model.BaoCaoTienDos.Any())
+    {
+        <ul>
+            @foreach (var bc in Model.BaoCaoTienDos)
+            {
+                <li>
+                    <strong>Nội dung báo cáo:</strong> @bc.NoiDungBaoCao <br />
+                    <strong>Tệp đính kèm:</strong> @bc.TepTinNop <br />
+                    <strong>Nhận xét:</strong> @bc.NhanXet
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Chưa có báo cáo tiến độ.</p>
+    }
+
+    <h3>Luận văn</h3>
+    @if (Model.LuanVans.Any())
+    {
+        <ul>
+            @foreach (var lv in Model.LuanVans)
+            {
+                <li>
+                    <strong>Tệp đính kèm:</strong> @lv.TepTinNop <br />
+                    <strong>Mô tả:</strong> @lv.MoTa <br />
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Chưa có luận văn.</p>
+    }
+
+    <h3>Kết quả</h3>
+    @if (Model.KetQuas.Any())
+    {
+        <ul>
+            @foreach (var kq in Model.KetQuas)
+            {
+                <li>
+                    <strong>Điểm quá trình:</strong> @kq.DiemQuaTrinh <br />
+                    <strong>Điểm bảo vệ:</strong> @kq.DiemBaoVe <br />
+                    <strong>Nhận xét:</strong> @kq.NhanXet
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Chưa có kết quả đánh giá.</p>
+    }
+
+</div>

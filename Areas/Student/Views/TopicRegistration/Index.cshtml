@@ -1,0 +1,225 @@
+﻿@model BTL_UML.ViewModels.DeTaiViewModel
+@{
+    ViewData["Title"] = "Đăng ký đề tài";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/student/css/topic-registration.css")" rel="stylesheet" />
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (ViewBag.CurrentKi == null)
+{
+    <div class="alert alert-warning">
+        <strong>Chưa mở kỳ bảo vệ.</strong> Hiện tại bạn không thể đăng ký đề tài.
+    </div>
+}
+else if (ViewBag.DeTaiDaDangKy != null)
+{
+    var deTai = ViewBag.DeTaiDaDangKy as BTL_UML.Data.DeTai;
+    if (deTai == null)
+    {
+        <div class="alert alert-warning">
+            Dữ liệu đề tài đăng ký không hợp lệ.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Thông tin đề tài đã đăng ký</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>Kỳ bảo vệ: <strong>@ViewBag.CurrentKi.TenKi</strong></h4>
+                        <div class="row mt-3">
+                            <div class="col-md-3"><strong>Mã đề tài:</strong></div>
+                            <div class="col-md-9">@deTai.MaDeTai</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong>Tên đề tài:</strong></div>
+                            <div class="col-md-9">@deTai.TenDeTai</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong>Mô tả:</strong></div>
+                            <div class="col-md-9">@deTai.MoTa</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong>Ngày đăng ký:</strong></div>
+                            <div class="col-md-9">@deTai.NgayDangKy?.ToString("dd/MM/yyyy HH:mm")</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"><strong>Trạng thái duyệt:</strong></div>
+                            <div class="col-md-9">
+                                @if (deTai.TrangThaiDuyet == "Chờ duyệt")
+                                {
+                                    <span class="badge bg-warning text-dark">@deTai.TrangThaiDuyet</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">@deTai.TrangThaiDuyet</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (deTai.TrangThaiDuyet == "Chờ duyệt")
+        {
+            if (ViewBag.GiangVienHuongDan != null)
+            {
+                var giangVien = ViewBag.GiangVienHuongDan;
+                if (giangVien != null)
+                {
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="mb-0">Giảng viên hướng dẫn hiện tại</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-info mb-3">
+                                        <p><strong>Họ tên:</strong> @giangVien.MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen</p>
+                                        <p><strong>Chức vụ:</strong> @giangVien.MaGiangVienNavigation?.ChucVu</p>
+                                        <p><strong>Học vị:</strong> @giangVien.MaGiangVienNavigation?.HocVi</p>
+                                    </div>
+
+                                    <form method="post" action="@Url.Action("RegisterAdvisor", "TopicRegistration", new { area = "Student" })">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="maDeTai" value="@deTai.MaDeTai" />
+                                        <div class="form-group mb-3">
+                                            <label class="control-label">Chọn giảng viên hướng dẫn khác (nếu muốn thay đổi)</label>
+                                            <select name="maGiangVien" class="form-select" required>
+                                                <option value="">-- Chọn giảng viên --</option>
+                                                @if (ViewBag.DanhSachGiangVien != null)
+                                                {
+                                                    foreach (var gv in ViewBag.DanhSachGiangVien)
+                                                    {
+                                                        <option value="@gv.MaGiangVien" @(gv.MaGiangVien == giangVien.MaGiangVien ? "selected" : "")>
+                                                            @gv.HocVi @gv.MaNguoiDungNavigation?.HoTen - @gv.ChucVu
+                                                        </option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary">Cập nhật giảng viên</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white">
+                                <h3 class="mb-0">Chọn giảng viên hướng dẫn</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="post" action="@Url.Action("RegisterAdvisor", "TopicRegistration", new { area = "Student" })">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="maDeTai" value="@deTai.MaDeTai" />
+                                    <div class="form-group mb-3">
+                                        <label class="control-label">Giảng viên hướng dẫn <span class="text-danger">*</span></label>
+                                        <select name="maGiangVien" class="form-select" required>
+                                            <option value="">-- Chọn giảng viên --</option>
+                                            @if (ViewBag.DanhSachGiangVien != null)
+                                            {
+                                                foreach (var gv in ViewBag.DanhSachGiangVien)
+                                                {
+                                                    <option value="@gv.MaGiangVien">
+                                                        @gv.HocVi @gv.MaNguoiDungNavigation?.HoTen - @gv.ChucVu
+                                                    </option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Đăng ký giảng viên</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            if (ViewBag.GiangVienHuongDan != null)
+            {
+                var giangVien = ViewBag.GiangVienHuongDan;
+                if (giangVien != null)
+                {
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h3 class="mb-0">Giảng viên hướng dẫn</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Họ tên:</strong> @giangVien.MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen</p>
+                                    <p><strong>Chức vụ:</strong> @giangVien.MaGiangVienNavigation?.ChucVu</p>
+                                    <p><strong>Học vị:</strong> @giangVien.MaGiangVienNavigation?.HocVi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        Kỳ bảo vệ hiện tại: <strong>@ViewBag.CurrentKi?.TenKi</strong>
+    </div>
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Đăng ký đề tài mới</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="@Url.Action("Create", "TopicRegistration", new { area = "Student" })">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="MaSinhVien" value="@ViewData["MaSinhVien"]" />
+                <div class="form-group mb-3">
+                    <label class="control-label">Tên đề tài <span class="text-danger">*</span></label>
+                    <input name="TenDeTai" class="form-control" value="@Model?.TenDeTai" required />
+                    <span class="text-danger">@Html.ValidationMessage("TenDeTai")</span>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="control-label">Mô tả <span class="text-danger">*</span></label>
+                    <textarea name="MoTa" class="form-control" rows="4" required>@Model?.MoTa</textarea>
+                    <span class="text-danger">@Html.ValidationMessage("MoTa")</span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Đăng ký</button>
+                    <a href="/Student/Home/Index" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+

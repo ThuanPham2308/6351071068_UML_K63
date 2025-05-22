@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="@Url.Content("~/lecturer/css/layout.css")" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Giảng viên - Hệ thống quản lý đồ án</title>
+</head>
+<body>
+    <div class="admin-control">
+        <div class="sidebar">
+            <div class="admin-profile">
+                <img src="@Url.Content(ViewData["Avatar"]?.ToString() ?? "~/shared/images/default-avatar.jpg")"
+                     alt="Admin Avatar" class="admin-avatar" />
+                <p class="admin-name">@ViewData["TenNguoiDung"]</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="/Lecturer/PostManagement/Index" id="post-management">
+                    <i class="fa-solid fa-newspaper"></i> Xem bài đăng
+                </a>
+                <a href="/Lecturer/TopicManagement/Index" id="topic-management">
+                    <i class="fas fa-tasks"></i> Quản lý đề tài
+                </a>
+
+                <a href="/Lecturer/Repository/Index" id="repository">
+                    <i class="fa-solid fa-archive"></i> Xem kho lưu trữ
+                </a>
+
+                <a href="/Lecturer/Setting/Index" id="setting">
+                    <i class="fa-solid fa-gear"></i> Cài đặt
+                </a>
+
+                <a href="/Home/Login" id="logout" method="post"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            @RenderBody()
+            @RenderSection("Scripts", required: false)
+        </div>
+    </div>
+</body>
+</html>

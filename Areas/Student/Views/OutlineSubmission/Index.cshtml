@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Nộp Đề Cương";
+    Layout = "~/Areas/Student/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/student/css/outline-submission.css" />
+
+<h2>Nộp Đề Cương</h2>
+
+@if (ViewBag.ThongBao != null)
+{
+    <div class="alert alert-warning">@ViewBag.ThongBao</div>
+}
+else
+{
+    var deTai = ViewData["DeTai"] as BTL_UML.Data.DeTai;
+    var deCuong = ViewData["DeCuong"] as BTL_UML.Data.DeCuongKeHoach;
+    string trangThaiDuyet = deTai?.TrangThaiDuyet;
+
+    if (deTai == null)
+    {
+        <div class="alert alert-danger">
+            Không tìm thấy đề tài.
+        </div>
+    }
+    else if (trangThaiDuyet == "Chờ duyệt" || trangThaiDuyet == "Từ chối")
+    {
+        <div class="alert alert-info">
+            <strong>Trạng thái đề tài:</strong> @trangThaiDuyet
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h4>Thông tin đề tài</h4>
+                <p><strong>Tên đề tài:</strong> @deTai.TenDeTai</p>
+                <p><strong>Mô tả:</strong> @deTai.MoTa</p>
+            </div>
+        </div>
+    }
+    else if (trangThaiDuyet == "Đã duyệt")
+    {
+        <div class="card">
+            <div class="card-body">
+                <h4>Thông tin đề tài</h4>
+                <p><strong>Tên đề tài:</strong> @deTai.TenDeTai</p>
+                <p><strong>Mô tả:</strong> @deTai.MoTa</p>
+
+                @if (deCuong == null)
+                {
+                    <form method="post" action="@Url.Action("SubmitOutline", "OutlineSubmission", new { area = "Student" })" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="MaDeTai" value="@deTai.MaDeTai" />
+
+                        <div class="form-group">
+                            <label for="NoiDungDeCuongFile">Nội dung đề cương (File)</label>
+                            <input type="file" class="form-control" id="NoiDungDeCuongFile" name="NoiDungDeCuongFile" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="KeHoachThucHienFile">Kế hoạch thực hiện (File)</label>
+                            <input type="file" class="form-control" id="KeHoachThucHienFile" name="KeHoachThucHienFile" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="GhiChu">Ghi chú</label>
+                            <textarea class="form-control" name="GhiChu"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-2">Nộp đề cương</button>
+                    </form>
+                }
+                else
+                {
+                    <h5 class="mt-4">Đề cương đã nộp</h5>
+                    <p>
+                        <strong>Đề cương:</strong>
+                        <a href="@deCuong.NoiDungDeCuong" target="_blank" class="btn btn-sm btn-info" rel="noopener noreferrer">
+                            <i class="fas fa-download"></i> Xem tệp nội dung đề cương
+                        </a>
+                    </p>
+
+                    <p>
+                        <strong>Kế hoạch:</strong>
+                        <a href="@deCuong.KeHoachThucHien" target="_blank" class="btn btn-sm btn-info" rel="noopener noreferrer">
+                            <i class="fas fa-download"></i> Xem tệp kế hoạch thực hiện
+                        </a>
+                    </p>
+                    <p><strong>Ngày nộp:</strong> @deCuong.NgayNop.ToString("dd/MM/yyyy")</p>
+                    <p><strong>Ghi chú:</strong> @deCuong.GhiChu</p>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Trạng thái đề tài không hợp lệ.
+        </div>
+    }
+}

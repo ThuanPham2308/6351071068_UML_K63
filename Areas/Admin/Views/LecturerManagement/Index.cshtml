@@ -1,0 +1,99 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<BTL_UML.Data.GiangVien>
+
+@{
+    ViewBag.Title = "Quản lý giảng viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/admin/css/lecturer-management.css")" rel="stylesheet" />
+
+<div id="lecturer-management-content">
+    <div class="content-section-header">Quản lý giảng viên</div>
+
+    <div class="search-options">
+        <form action="/Admin/LecturerManagement/Index" method="get">
+            <div class="filter-bar">
+                @Html.TextBox("search", ViewBag.CurrentSearch as string, new { @class = "search-input", placeholder = "Tìm kiếm giảng viên..." })
+                <button type="submit" class="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+                <label for="departmentFilter">Lọc theo chuyên môn:</label>
+                @Html.DropDownList(
+                         "departmentFilter",
+                         (SelectList)ViewBag.DepartmentList,
+                         "Tất cả chuyên môn",
+                         new { onchange = "this.form.submit();" }
+                         )
+            </div>
+        </form>
+    </div>
+
+    <div class="actions mt-3">
+        <a href="/Admin/LecturerManagement/Create" class="add-button btn btn-success"><i class="fa fa-plus"></i> Thêm giảng viên</a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="lecturer-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã giảng viên</th>
+                        <th>Tên giảng viên</th>
+                        <th>Chức vụ</th>
+                        <th>Chuyên môn</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lecturer in Model)
+                    {
+                        <tr>
+                            <td>@lecturer.MaGiangVien</td>
+                            <td>@lecturer.MaNguoiDungNavigation?.HoTen</td>
+                            <td>@lecturer.ChucVu</td>
+                            <td>@lecturer.ChuyenMon</td>
+                            <td>@lecturer.MaNguoiDungNavigation?.Email</td>
+                            <td>@lecturer.MaNguoiDungNavigation?.SoDienThoai</td>
+                            <td class="actions center-clm">
+                                <a href="/Admin/LecturerManagement/Edit?id=@lecturer.MaGiangVien" class="edit-button">Sửa</a>
+                                <form method="post" action="/Admin/LecturerManagement/Delete?id=@lecturer.MaGiangVien" style="display:inline-block;">
+                                    <button type="submit" class="delete-button" onclick="return confirm('Bạn có chắc muốn xóa giảng viên này?');">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            @if (Model.PageCount > 1)
+            {
+                <ul class="pagination-list">
+                    @if (Model.PageNumber > 1)
+                    {
+                        <li><a href="/Admin/LecturerManagement/Index?page=1&search=@ViewBag.CurrentSearch&departmentFilter=@ViewBag.DepartmentFilter">&laquo;&laquo;</a></li>
+                        <li><a href="/Admin/LecturerManagement/Index?page=@(Model.PageNumber - 1)&search=@ViewBag.CurrentSearch&departmentFilter=@ViewBag.DepartmentFilter">&laquo;</a></li>
+                    }
+                    @foreach (var p in ViewBag.PagesToShow as List<int>)
+                    {
+                        <li class="@(p == Model.PageNumber ? "active" : "")">
+                            <a href="/Admin/LecturerManagement/Index?page=@p&search=@ViewBag.CurrentSearch&departmentFilter=@ViewBag.DepartmentFilter">@p</a>
+                        </li>
+                    }
+                    @if (Model.PageNumber < Model.PageCount)
+                    {
+                        <li><a href="/Admin/LecturerManagement/Index?page=@(Model.PageNumber + 1)&search=@ViewBag.CurrentSearch&departmentFilter=@ViewBag.DepartmentFilter">&raquo;</a></li>
+                        <li><a href="/Admin/LecturerManagement/Index?page=@Model.PageCount&search=@ViewBag.CurrentSearch&departmentFilter=@ViewBag.DepartmentFilter">&raquo;&raquo;</a></li>
+                    }
+                </ul>
+            }
+        </div>
+    }
+    else
+    {
+        <p>Không có giảng viên nào trong hệ thống.</p>
+    }
+</div>

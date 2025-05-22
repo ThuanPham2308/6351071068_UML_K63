@@ -1,0 +1,102 @@
+﻿@model BTL_UML.ViewModels.SinhVienViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa sinh viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="@Url.Content("~/admin/css/student-management.css")" rel="stylesheet" />
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-area="Admin" asp-controller="StudentManagement" asp-action="Edit" method="post" class="form-horizontal">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        <label class="control-label">Họ tên <span class="text-danger">*</span></label>
+        <input name="HoTen" class="form-control" value="@Model.HoTen" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Ngày sinh <span class="text-danger">*</span></label>
+        <input name="NgaySinh" type="date" class="form-control" value="@Model.NgaySinh.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Giới tính <span class="text-danger">*</span></label>
+        <select name="GioiTinh" class="form-control">
+            <option value="">-- Chọn giới tính --</option>
+            <option value="Nam" @(Model.GioiTinh == "Nam" ? "selected" : "")>Nam</option>
+            <option value="Nữ" @(Model.GioiTinh == "Nữ" ? "selected" : "")>Nữ</option>
+        </select>
+        <span asp-validation-for="GioiTinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Địa chỉ <span class="text-danger">*</span></label>
+        <input name="DiaChi" class="form-control" value="@Model.DiaChi" />
+        <span asp-validation-for="DiaChi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Quê quán <span class="text-danger">*</span></label>
+        <input name="QueQuan" class="form-control" value="@Model.QueQuan" />
+        <span asp-validation-for="QueQuan" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Ảnh đại diện</label>
+        <input name="AnhDaiDien" type="text" class="form-control" value="@Model.AnhDaiDien" />
+        <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số CMND <span class="text-danger">*</span></label>
+        <input name="SoCmnd" class="form-control" value="@Model.SoCmnd" />
+        <span asp-validation-for="SoCMND" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Email<span class="text-danger">*</span></label>
+        <input name="Email" type="email" class="form-control" value="@Model.Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số điện thoại <span class="text-danger">*</span></label>
+        <input name="SoDienThoai" class="form-control" value="@Model.SoDienThoai" />
+        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Tên đăng nhập <span class="text-danger">*</span></label>
+        <input name="TenDangNhap" class="form-control" value="@Model.TenDangNhap" />
+        <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="TenLop">Lớp học<span class="text-danger">*</span></label>
+        @Html.DropDownListFor(model => model.TenLop, (SelectList)ViewBag.LopHocList, "-- Chọn lớp --", new { @class = "form-control" })
+        <span asp-validation-for="TenLop" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <a href="/Admin/StudentManagement/Index" class="btn btn-secondary">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

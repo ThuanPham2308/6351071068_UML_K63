@@ -1,0 +1,100 @@
+﻿/* Định dạng tiêu đề */
+h2 {
+    font-size: 28px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 24px;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+h4 {
+    font-size: 20px;
+    color: #2980b9;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+/* Đoạn văn mô tả */
+p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #2c3e50;
+}
+
+/* Bảng báo cáo tiến độ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table th {
+        background-color: #f2f2f2;
+        color: #2c3e50;
+        font-weight: bold;
+    }
+
+/* Form duyệt đề tài, nhận xét, xác nhận bảo vệ, lưu kết quả */
+form {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+    form label {
+        display: inline-block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    form select,
+    form input[type="number"],
+    form textarea {
+        width: 100%;
+        max-width: 400px;
+        padding: 6px;
+        margin-top: 4px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    form button {
+        background-color: #3498db;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+    ul li {
+        margin-bottom: 6px;
+    }

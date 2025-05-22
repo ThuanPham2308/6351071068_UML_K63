@@ -1,0 +1,91 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/admin/css/index.css")" rel="stylesheet" />
+
+<div class="dashboard-container">
+    <h2>Xin chào, Quản trị viên</h2>
+
+    <div class="stats-summary">
+        <div class="stat-card">
+            <i class="fa-solid fa-user-graduate"></i>
+            <div class="stat-info">
+                <p>@ViewBag.StudentsInCurrentDefense Sinh viên</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-chalkboard-teacher"></i>
+            <div class="stat-info">
+                <p>@ViewBag.TotalLecturers Giảng viên</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-book"></i>
+            <div class="stat-info">
+                <p>@ViewBag.TotalArchived Kho lưu trữ</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <i class="fa-solid fa-clock"></i>
+            <div class="stat-info">
+                <p>@ViewBag.OngoingTopics Chờ duyệt</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-row">
+        <div class="chart-box">
+            <h4>Tình trạng đề tài</h4>
+            <canvas id="statusPieChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <h4>Số lượng đề tài theo giảng viên</h4>
+            <canvas id="lecturerTopicsChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    const statusPieCtx = document.getElementById('statusPieChart');
+    const studentsByClassCtx = document.getElementById('studentsByClassChart');
+
+    new Chart(statusPieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Đang thực hiện', 'Chờ duyệt', 'Từ chối'],
+            datasets: [{
+                data: [@ViewBag.CompletedTopics, @ViewBag.OngoingTopics, @ViewBag.PendingTopics],
+                backgroundColor: ['#007bff', '#28a745', '#ffc107'],
+            }]
+        }
+    });
+</script>
+<script>
+    const lecturerChartCtx = document.getElementById('lecturerTopicsChart');
+
+    new Chart(lecturerChartCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(ViewBag.LecturerNamesJson),
+            datasets: [{
+                label: 'Số lượng đề tài hướng dẫn',
+                data: @Html.Raw(ViewBag.TopicCountsJson),
+                backgroundColor: '#007bff',
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    precision: 0
+                }
+            }
+        }
+    });
+</script>
+
+
+
+

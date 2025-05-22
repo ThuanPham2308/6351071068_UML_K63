@@ -1,0 +1,138 @@
+﻿@model BTL_UML.ViewModels.GiangVienViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa giảng viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="@Url.Content("~/admin/css/teacher-management.css")" rel="stylesheet" />
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@modelError.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-area="Admin" asp-controller="LecturerManagement" asp-action="Edit" method="post" class="form-horizontal">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        <label class="control-label">Họ tên <span class="text-danger">*</span></label>
+        <input name="HoTen" class="form-control" value="@Model.HoTen" />
+        <span asp-validation-for="HoTen" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Ngày sinh <span class="text-danger">*</span></label>
+        <input name="NgaySinh" type="date" class="form-control" value="@Model.NgaySinh.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="NgaySinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Giới tính <span class="text-danger">*</span></label>
+        <select name="GioiTinh" class="form-control">
+            <option value="">-- Chọn giới tính --</option>
+            <option value="Nam" @(Model.GioiTinh == "Nam" ? "selected" : "")>Nam</option>
+            <option value="Nữ" @(Model.GioiTinh == "Nữ" ? "selected" : "")>Nữ</option>
+        </select>
+        <span asp-validation-for="GioiTinh" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Địa chỉ <span class="text-danger">*</span></label>
+        <input name="DiaChi" class="form-control" value="@Model.DiaChi" />
+        <span asp-validation-for="DiaChi" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Quê quán <span class="text-danger">*</span></label>
+        <input name="QueQuan" class="form-control" value="@Model.QueQuan" />
+        <span asp-validation-for="QueQuan" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Ảnh đại diện</label>
+        <input name="AnhDaiDien" type="text" class="form-control" value="@Model.AnhDaiDien" />
+        <span asp-validation-for="AnhDaiDien" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số CMND <span class="text-danger">*</span></label>
+        <input name="SoCmnd" class="form-control" value="@Model.SoCmnd" />
+        <span asp-validation-for="SoCmnd" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Email <span class="text-danger">*</span></label>
+        <input name="Email" type="email" class="form-control" value="@Model.Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Số điện thoại <span class="text-danger">*</span></label>
+        <input name="SoDienThoai" class="form-control" value="@Model.SoDienThoai" />
+        <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Tên đăng nhập <span class="text-danger">*</span></label>
+        <input name="TenDangNhap" class="form-control" value="@Model.TenDangNhap" />
+        <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Chức vụ <span class="text-danger">*</span></label>
+        <select name="ChucVu" class="form-control" required>
+            <option value="">-- Chọn chức vụ --</option>
+            <option @(Model.ChucVu == "Trưởng Bộ môn" ? "selected" : "")>Trưởng Bộ môn</option>
+            <option @(Model.ChucVu == "Phó Bộ môn" ? "selected" : "")>Phó Bộ môn</option>
+            <option @(Model.ChucVu == "Giảng viên" ? "selected" : "")>Giảng viên</option>
+            <option @(Model.ChucVu == "Trợ giảng" ? "selected" : "")>Trợ giảng</option>
+        </select>
+        <span asp-validation-for="ChucVu" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Chuyên môn <span class="text-danger">*</span></label>
+        <select name="ChuyenMon" class="form-control" required>
+            <option value="">-- Chọn chuyên môn --</option>
+            <option @(Model.ChuyenMon == "CNTT" ? "selected" : "")>CNTT</option>
+            <option @(Model.ChuyenMon == "PM" ? "selected" : "")>PM</option>
+            <option @(Model.ChuyenMon == "Mạng" ? "selected" : "")>Mạng</option>
+            <option @(Model.ChuyenMon == "Dữ liệu" ? "selected" : "")>Dữ liệu</option>
+            <option @(Model.ChuyenMon == "AI" ? "selected" : "")>AI</option>
+            <option @(Model.ChuyenMon == "Hệ thống" ? "selected" : "")>Hệ thống</option>
+            <option @(Model.ChuyenMon == "Phân tích" ? "selected" : "")>Phân tích</option>
+            <option @(Model.ChuyenMon == "Lập trình" ? "selected" : "")>Lập trình</option>
+        </select>
+        <span asp-validation-for="ChuyenMon" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Học vị <span class="text-danger">*</span></label>
+        <select name="HocVi" class="form-control" required>
+            <option value="">-- Chọn học vị --</option>
+            <option @(Model.HocVi == "Kỹ sư" ? "selected" : "")>Kỹ sư</option>
+            <option @(Model.HocVi == "Thạc sĩ" ? "selected" : "")>Thạc sĩ</option>
+            <option @(Model.HocVi == "Tiến sĩ" ? "selected" : "")>Tiến sĩ</option>
+            <option @(Model.HocVi == "Phó giáo sư" ? "selected" : "")>Phó giáo sư</option>
+            <option @(Model.HocVi == "Giáo sư" ? "selected" : "")>Giáo sư</option>
+        </select>
+        <span asp-validation-for="HocVi" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Cập nhật</button>
+        <a href="/Admin/LecturerManagement/Index" class="btn btn-secondary">Hủy</a>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

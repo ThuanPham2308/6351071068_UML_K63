@@ -1,0 +1,51 @@
+﻿@model BTL_UML.Models.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng nhập</title>
+    <link href="~/shared/css/login.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <img src="@Url.Content("~/shared/images/logo_bmcntt.png")" class="logo" />
+        <p>HỆ THỐNG ĐỒ ÁN, LUẬN VĂN BỘ MÔN CNTT - ĐH GTVT PHÂN HIỆU HCM</p>
+    </div>
+
+    <div class="login-container">
+        <h2>Nhập thông tin tài khoản</h2>
+        <form asp-action="Login" method="post">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input asp-for="TenDangNhap" placeholder="Tên đăng nhập" />
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input asp-for="MatKhau" type="password" placeholder="Mật khẩu" />
+            </div>
+
+            <button type="submit" class="login-btn">Đăng nhập</button>
+        </form>
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div style="color: red; margin-top: 10px;">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+        }
+
+        <div class="forgot-password">
+            <a href="@Url.Action("ForgotPassword", "Home")">Quên mật khẩu?</a>
+        </div>
+    </div>
+
+    <div class="footer">2025 © PhamVanThuan</div>
+</body>
+</html>

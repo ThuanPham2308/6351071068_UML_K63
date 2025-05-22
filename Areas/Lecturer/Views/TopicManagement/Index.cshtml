@@ -1,0 +1,99 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<BTL_UML.Data.DeTai>
+
+@{
+    ViewBag.Title = "Quản lý đề tài";
+    Layout = "~/Areas/Lecturer/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/admin/css/defense-session-management.css")" rel="stylesheet" />
+
+<div class="defense-session-management">
+    <h1>Quản lý đề tài</h1>
+
+    <div class="search-options">
+        <form method="get" action="/Lecturer/TopicManagement/Index">
+            <div class="filter-bar"> 
+
+                <label for="roleFilter">Vai trò:</label>
+                @Html.DropDownList("roleFilter", new SelectList(new[] { "Tất cả", "Hướng dẫn", "Biện luận" }, ViewBag.RoleFilter), new { onchange = "this.form.submit();" })
+
+                <label for="statusFilter">Trạng thái:</label>
+                @Html.DropDownList("statusFilter", new SelectList(new[] { "Tất cả", "Chờ duyệt", "Đã duyệt", "Từ chối" }, ViewBag.StatusFilter), new { onchange = "this.form.submit();" })
+
+                @Html.TextBox("search", ViewBag.CurrentSearch as string, new { @class = "search-input", placeholder = "Tìm kiếm đề tài hoặc sinh viên..." })
+                <button type="submit" class="search"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <div class="defense-session-table mt-4">
+        @if (Model.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Đợt bảo vệ</th>
+                        <th>Tên đề tài</th>
+                        <th>Giảng viên hướng dẫn</th>
+                        <th>Giảng viên biện luận</th>
+                        <th>Sinh viên</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dt in Model)
+                    {
+                        var huongDan = dt.PhanCongGiangViens
+                        .FirstOrDefault(p => p.VaiTro == "Hướng dẫn")?
+                        .MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen ?? "Chưa phân công";
+
+                        var bienLuan = dt.PhanCongGiangViens
+                        .FirstOrDefault(p => p.VaiTro == "Biện luận")?
+                        .MaGiangVienNavigation?.MaNguoiDungNavigation?.HoTen ?? "Chưa phân công";
+
+                        <tr>
+                            <td>@dt.MaKiNavigation?.TenKi</td>
+                            <td>@dt.TenDeTai</td>
+                            <td>@huongDan</td>
+                            <td>@bienLuan</td>
+                            <td>@dt.MaSinhVienNavigation?.MaNguoiDungNavigation?.HoTen</td>
+                            <td>@dt.TrangThaiDuyet</td>
+                            <td class="actions">
+                                <a href="/Lecturer/TopicManagement/DetailTopic?id=@dt.MaDeTai" class="btn-view">Xem chi tiết</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Không có đề tài nào phù hợp.</p>
+        }
+    </div>
+
+    <div class="pagination">
+        @if (Model.PageCount > 1)
+        {
+            <ul class="pagination-list">
+                @if (Model.PageNumber > 1)
+                {
+                    <li><a href="@Url.Action("Index", new { page = 1, search = ViewBag.CurrentSearch, roleFilter = ViewBag.RoleFilter, statusFilter = ViewBag.StatusFilter })">&laquo;&laquo;</a></li>
+                    <li><a href="@Url.Action("Index", new { page = Model.PageNumber - 1, search = ViewBag.CurrentSearch, roleFilter = ViewBag.RoleFilter, statusFilter = ViewBag.StatusFilter })">&laquo;</a></li>
+                }
+                @foreach (var p in ViewBag.PagesToShow as List<int>)
+                {
+                    <li class="@(p == Model.PageNumber ? "active" : "")">
+                        <a href="@Url.Action("Index", new { page = p, search = ViewBag.CurrentSearch, roleFilter = ViewBag.RoleFilter, statusFilter = ViewBag.StatusFilter })">@p</a>
+                    </li>
+                }
+                @if (Model.PageNumber < Model.PageCount)
+                {
+                    <li><a href="@Url.Action("Index", new { page = Model.PageNumber + 1, search = ViewBag.CurrentSearch, roleFilter = ViewBag.RoleFilter, statusFilter = ViewBag.StatusFilter })">&raquo;</a></li>
+                    <li><a href="@Url.Action("Index", new { page = Model.PageCount, search = ViewBag.CurrentSearch, roleFilter = ViewBag.RoleFilter, statusFilter = ViewBag.StatusFilter })">&raquo;&raquo;</a></li>
+                }
+            </ul>
+        }
+    </div>
+</div>
